@@ -1,60 +1,38 @@
 //
 //  ViewController.swift
-//  Tunes
+//  Tunes2
 //
-//  Created by Kevin Randrup on 10/31/17.
-//  Copyright © 2017 Kevin Randrup. All rights reserved.
+//  Created by Lauren Kearley on 10/16/18.
+//  Copyright © 2018 iosgatech. All rights reserved.
 //
 
 import UIKit
+import AVKit
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UISearchBarDelegate {
 
-    var songs: [Song] = [
-        Song(trackName: "Run the World (Girls)", artistName: "Beyoncé", trackTimeMillis: 238305, trackPrice: 1.29)
-    ]
-    // BONUS: Search bar
+    var songs: [Song] = []
     var searchBar = UISearchBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        // Uncomment without the search bar
-        /*
-        SongDownloader.downloadSongs(searchTerm: "Boyoncé") { (songs) in
-            DispatchQueue.main.async {
-                self.songs = songs
-                self.tableView.reloadData()
-            }
-        }
-        */
-        
-        // BONUS: Search bar
         searchBar.sizeToFit()
         searchBar.delegate = self
         tableView.tableHeaderView = searchBar
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return songs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let CELL_ID = "Cell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID) ??
-            UITableViewCell(style: .subtitle, reuseIdentifier: CELL_ID)
-        
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         let song = songs[indexPath.row]
         cell.textLabel?.text = "\(song.trackName) by \(song.artistName)"
-        cell.detailTextLabel?.text = "\(song.displayTrackTime) for just $\(song.trackPrice)"
-        
+        cell.detailTextLabel?.text = song.displayTrackTime
         return cell
     }
-}
-
-// BONUS: Search bar
-extension ViewController : UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         SongDownloader.downloadSongs(searchTerm: searchBar.text!) { (songs) in
             DispatchQueue.main.async {
@@ -63,4 +41,14 @@ extension ViewController : UISearchBarDelegate {
             }
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = self.songs[indexPath.row]
+        let playerController = AVPlayerViewController()
+        playerController.player = AVPlayer(url: URL(string: song.previewUrl)!)
+        present(playerController, animated: true, completion: {
+            playerController.player?.play()
+        })
+    }
+
 }
