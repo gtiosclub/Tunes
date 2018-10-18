@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 
 class ViewController: UITableViewController, UISearchBarDelegate {
-
+    
     var songs: [Song] = []
     var searchBar = UISearchBar()
     
@@ -46,9 +46,14 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         let song = self.songs[indexPath.row]
         let playerController = AVPlayerViewController()
         playerController.player = AVPlayer(url: URL(string: song.previewUrl)!)
+        if let imageData = NSData(contentsOf: (URL(string: song.artworkUrl100)!)) {
+            let imageView = UIImageView(image: UIImage(data: imageData as Data))
+            imageView.center = playerController.view.center
+            playerController.contentOverlayView?.addSubview(imageView)
+        }
         present(playerController, animated: true, completion: {
             playerController.player?.play()
         })
     }
-
+    
 }

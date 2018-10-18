@@ -13,6 +13,7 @@ struct Song : Codable {
     let artistName: String
     let trackTimeMillis: Int
     let previewUrl: String
+    let artworkUrl100: String
     
     var displayTrackTime : String {
         let seconds = trackTimeMillis / 1000
