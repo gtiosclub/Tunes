@@ -9,16 +9,18 @@
 import UIKit
 import AVKit
 
-class ViewController: UITableViewController, UISearchBarDelegate {
+class ViewController: UITableViewController, UISearchResultsUpdating {
     
     var songs: [Song] = []
-    var searchBar = UISearchBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.sizeToFit()
-        searchBar.delegate = self
-        tableView.tableHeaderView = searchBar
+        definesPresentationContext = true
+        let search = UISearchController(searchResultsController: nil)
+        search.searchResultsUpdater = self
+        search.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = search
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,11 +35,13 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        SongDownloader.downloadSongs(searchTerm: searchBar.text!) { (songs) in
-            DispatchQueue.main.async {
-                self.songs = songs
-                self.tableView.reloadData()
+    func updateSearchResults(for searchController: UISearchController) {
+        if let query = searchController.searchBar.text {
+            SongDownloader.downloadSongs(searchTerm: query) { (songs) in
+                DispatchQueue.main.async {
+                    self.songs = songs
+                    self.tableView.reloadData()
+                }
             }
         }
     }
