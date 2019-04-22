@@ -83,9 +83,9 @@
 			children = (
 				0A9553081FA92C4500B3D28A /* AppDelegate.swift */,
 				0A95530A1FA92C4500B3D28A /* ViewController.swift */,
+				0A95530C1FA92C4500B3D28A /* Main.storyboard */,
 				0A95532A1FA931A200B3D28A /* SongDownloader.swift */,
 				0A9553281FA92CFE00B3D28A /* Song.swift */,
-				0A95530C1FA92C4500B3D28A /* Main.storyboard */,
 				0A95530F1FA92C4500B3D28A /* Assets.xcassets */,
 				0A9553111FA92C4500B3D28A /* LaunchScreen.storyboard */,
 				0A9553141FA92C4500B3D28A /* Info.plist */,
